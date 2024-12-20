@@ -39,6 +39,8 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+type EmojiSet = { name: string, set: string, isActive: boolean }
+type EmojiSets = Record<string, EmojiSet>
 
 export default defineComponent({
   data: () => {
@@ -51,24 +53,28 @@ export default defineComponent({
           name: "😜 default",
           set: "😙 😅 🙁 🤔 😭 ☠️ 💬 💣 🧐 😈 💞 🙀 🤧 😴 💦 😢 ☹️ 😵 🤨 😓 💝 😬 😜 🥴 😍 😸 👺 🤣 💭 😰 💛 😹 😋 🤗 😗 💫 🤯 🙄 😐 👾 👽 💖 🙂 🥶 😒 😠 🙉 😳 😘 💟 🥺 🤍 🥳 😌 😔 🤕 🤪 👻 😝 😞 🤎 😎 🤭 😇 😻 😶 😷 😪 🥱 🤩 😧 😏 ❣️ 😨 🤠 💗 😫 🖤 😿 😤 🤖 👹 🤫 😛 🤮 🤡 😺 😲 😩 🤓 😖 😱 😕 😮 💙 🧡 😦 🗨️ 😄 🤑 💓 😁 😑 💨 🙊 🙃 💤 😯 ❤️ 🤬 💯 💌 💕 🥰 😃 🥵 🤥 💀 💔 💜 💥 💋 💘 😀 🤐 😼 😵 😀 😉 👿 🤤 😥 😆 🙈 😽 😾 😚 🤢 🤒 💩 😡 😂 😊 💢 😣 🗯️ 💚",
           isActive: true,
-        },
+        } as EmojiSet,
         depressed: {
           name: "😥 depressed",
-          set: "😣 😥 🤧 💦 😓 😾 😵 😰 🤐"
-        },
+          set: "😣 😥 🤧 💦 😓 😾 😵 😰 🤐",
+          isActive: false
+        } as EmojiSet,
         gothic: {
           name: "⛓ gothic",
-          set: "♱ ✮ ☠︎ † ✧ ☆ ★ ♡ ༒ ⭑๋࣭ ✟ ♬ ♪ ☦ ✞ ✩ 🕷️ 🖤 ⛓ 💉 ✖️ ⚰️ 🕯 🗡 🔗 🎧 📓 ⛓ ☠️ 🎀 🕯️ 🍷 ♰ 🕸️ 🎀 🕷️ 🔪 💀 🗝️ 🖇️ 🎸 ✟ ✖️ 💉"
-        },
+          set: "♱ ✮ ☠︎ † ✧ ☆ ★ ♡ ༒ ⭑๋࣭ ✟ ♬ ♪ ☦ ✞ ✩ 🕷️ 🖤 ⛓ 💉 ✖️ ⚰️ 🕯 🗡 🔗 🎧 📓 ⛓ ☠️ 🎀 🕯️ 🍷 ♰ 🕸️ 🎀 🕷️ 🔪 💀 🗝️ 🖇️ 🎸 ✟ ✖️ 💉",
+          isActive: false
+        } as EmojiSet,
         love: {
           name: "💕 love",
-          set: "❤️ 💕 💜 💙 💔 💖 ♥️ 💗 💛 💓 💚 🤍 🖤  💞 ❣️ 💘 🧡 💝 💟 🤎 😍  😭 🥺 🙏 ✨ 🌸 🌺 💋 😘 💦 🥰 ☺️ 🔥 🌹 😋 🦶 🦋 😊"
-        },
+          set: "❤️ 💕 💜 💙 💔 💖 ♥️ 💗 💛 💓 💚 🤍 🖤  💞 ❣️ 💘 🧡 💝 💟 🤎 😍  😭 🥺 🙏 ✨ 🌸 🌺 💋 😘 💦 🥰 ☺️ 🔥 🌹 😋 🦶 🦋 😊",
+          isActive: false
+        } as EmojiSet,
         ownSet: {
           name: "🔎 own set",
-          set: ''
-        }
-      }
+          set: '',
+          isActive: false
+        } as EmojiSet
+      } as EmojiSets
     }
   },
 
@@ -79,7 +85,7 @@ export default defineComponent({
   },
 
   methods: {
-    tabClick(item) {
+    tabClick(item: EmojiSet) {
       // set active tab
       for (const name in this.emojiSets) {
         this.emojiSets[name].isActive = false;
@@ -89,9 +95,9 @@ export default defineComponent({
     },
 
     doShit() {
-      let currentEmojiSet: any = [];
+      let currentEmojiSet: Array<string> = [];
 
-      const splitEmoji = (string) => [...new Intl.Segmenter().segment(string)].map(x => x.segment);
+      const splitEmoji = (string: string) => [...new (Intl as any).Segmenter().segment(string)].map(x => x.segment);
 
       for (const name in this.emojiSets) {
         if (this.emojiSets[name].isActive) {
