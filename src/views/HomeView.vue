@@ -4,159 +4,116 @@
 
 <template>
   <section>
+    <div class="content">
+      <p class="mt-5 docs-header uppecase has-text-centered">EMOJI MADNESS</p>
+    </div>
+
+    <hr class="hr mb-0">
     <div class="container">
-      <h2 class="docs-header">emoji madness</h2>
 
       <div class="menu">
-        <label for="radio-default"><input v-model="radioValue" type="radio" value="default" id="radio-default"   name="asjkdfh">😜 default</label>
-        <label for="radio-gothic"><input v-model="radioValue" type="radio" value="gothic" id="radio-gothic" name="asjkdfh">☠️ gothic</label>
-        <label for="radio-love"><input v-model="radioValue" type="radio" value="love" id="radio-love" name="asjkdfh">💗 love</label>
-        <label for="radio-own"><input v-model="radioValue" type="radio" value="own" id="radio-own" name="asjkdfh">🔎 own set</label>
+        <div class="tabs is-toggle is-medium mb-4">
+          <ul class="is-large">
+            <li @click="tabClick(item)" v-for="item in emojiSets" :key="item.name"
+              :class="{ 'is-active': item.isActive }">
+              <a><span>{{ item.name }}</span></a>
+            </li>
+          </ul>
+        </div>
 
-        <input class="own-input" v-if="isOwnInputShown" v-model="emojiSet" placeholder="set your own emoji set" type="text">
+        <input class="own-input input is-large mb-4" v-if="isOwnInputShown" v-model="emojiSets.ownSet.set"
+          placeholder="set your own emoji map" type="text">
       </div>
-      <textarea v-model='textarea' placeholder="type a text" name="" id="" cols="30" rows="20"></textarea>
-      <button @click="doShit" class="submit button button-primary">go go go!</button>
+
+      <textarea class="textarea is-large mb-4" v-model='textarea' placeholder="type a text" name="" id=""
+        rows="10"></textarea>
+      <button @click="doShit" class="container submit button is-outlined is-mobile max-width is-primary is-large">
+        go go go!
+      </button>
     </div>
-    
+
 
   </section>
-  
+
 </template>
 
 <script lang="ts">
-  import { defineComponent } from 'vue';
+import { defineComponent } from 'vue';
 
-  export default defineComponent({
-    data: () => {
-      return {
-        radioValue: 'default' as ( 'default' | 'love' | 'own' | 'gothic' ),
-        emojiSet: '', 
-        textarea: ''
-      }
-    },
-
-    computed: {
-      isOwnInputShown: function() {
-        return this.radioValue == 'own';
-      }
-    },
-
-    methods: {
-      doShit() {
-        let emojiStringToArray = function (str: string) {
-          let split = str.split(/([\uD800-\uDBFF][\uDC00-\uDFFF])/);
-          let arr = [];
-          for (var i=0; i<split.length; i++) {
-            let char = split[i]
-            if (char !== "") {
-              arr.push(char);
-            }
-          }
-          return arr;
-        };
-
-        let currentEmojiSet: any = [];
-        const gothicPattern = "♱ ✮ ☠︎ † ✧ ☆ ★ ♡ ༒ ⭑๋࣭ ✟ ♬ ♪ ☦ ✞ ✩ 🕷️ 🖤 ⛓ 💉 ✖️ ⚰️ 🕯 🗡 🔗 🎧 📓 ⛓ ☠️ 🎀 🕯️ 🍷 ♰ 🕸️ 🎀 🕷️ 🔪 💀 🗝️ 🖇️ 🎸 ✟ ✖️ 💉";
-        const defaultPattern = "😙 😅 🙁 🤔 😭 ☠️ 💬 💣 🧐 😈 💞 🙀 🤧 😴 💦 😢 ☹️ 😵 🤨 😓 💝 😬 😜 🥴 😍 😸 👺 🤣 💭 😰 💛 😹 😋 🤗 😗 💫 🤯 🙄 😐 👾 👽 💖 🙂 🥶 😒 😠 🙉 😳 😘 💟 🥺 🤍 🥳 😌 😔 🤕 🤪 👻 😝 😞 🤎 😎 🤭 😇 😻 😶 😷 😪 🥱 🤩 😧 😏 ❣️ 😨 🤠 💗 😫 🖤 😿 😤 🤖 👹 🤫 😛 🤮 🤡 😺 😲 😩 🤓 😖 😱 😕 😮 💙 🧡 😦 🗨️ 😄 🤑 💓 😁 😑 💨 🙊 🙃 💤 😯 ❤️ 🤬 💯 💌 💕 🥰 😃 🥵 🤥 💀 💔 💜 💥 💋 💘 😀 🤐 😼 😵 😀 😉 👿 🤤 😥 😆 🙈 😽 😾 😚 🤢 🤒 💩 😡 😂 😊 💢 😣 🗯️ 💚";
-        const lovePattern = "❤️ 💕 💜 💙 💔 💖 ♥️ 💗 💛 💓 💚 🤍 🖤  💞 ❣️ 💘 🧡 💝 💟 🤎 😍  😭 🥺 🙏 ✨ 🌸 🌺 💋 😘 💦 🥰 ☺️ 🔥 🌹 😋 🦶 🦋 😊"
-
-        if(this.radioValue !== 'own') {
-          if(this.radioValue == 'gothic') {
-            currentEmojiSet = gothicPattern.split(' ');  
-          } else if(this.radioValue == 'default') {
-            currentEmojiSet = defaultPattern.split(' ')
-          } else if(this.radioValue == 'love') {
-            currentEmojiSet = lovePattern.split(' ');
-          }
-        } else {
-          // currentEmojiSet = emojiStringToArray(this.emojiSet) 
-          currentEmojiSet = this.emojiSet.split(' ');
+export default defineComponent({
+  data: () => {
+    return {
+      radioValue: 'default' as ('default' | 'love' | 'own' | 'gothic'),
+      emojiSet: '',
+      textarea: '',
+      emojiSets: {
+        default: {
+          name: "😜 default",
+          set: "😙 😅 🙁 🤔 😭 ☠️ 💬 💣 🧐 😈 💞 🙀 🤧 😴 💦 😢 ☹️ 😵 🤨 😓 💝 😬 😜 🥴 😍 😸 👺 🤣 💭 😰 💛 😹 😋 🤗 😗 💫 🤯 🙄 😐 👾 👽 💖 🙂 🥶 😒 😠 🙉 😳 😘 💟 🥺 🤍 🥳 😌 😔 🤕 🤪 👻 😝 😞 🤎 😎 🤭 😇 😻 😶 😷 😪 🥱 🤩 😧 😏 ❣️ 😨 🤠 💗 😫 🖤 😿 😤 🤖 👹 🤫 😛 🤮 🤡 😺 😲 😩 🤓 😖 😱 😕 😮 💙 🧡 😦 🗨️ 😄 🤑 💓 😁 😑 💨 🙊 🙃 💤 😯 ❤️ 🤬 💯 💌 💕 🥰 😃 🥵 🤥 💀 💔 💜 💥 💋 💘 😀 🤐 😼 😵 😀 😉 👿 🤤 😥 😆 🙈 😽 😾 😚 🤢 🤒 💩 😡 😂 😊 💢 😣 🗯️ 💚",
+          isActive: true,
+        },
+        depressed: {
+          name: "😥 depressed",
+          set: "😣 😥 🤧 💦 😓 😾 😵 😰 🤐"
+        },
+        gothic: {
+          name: "⛓ gothic",
+          set: "♱ ✮ ☠︎ † ✧ ☆ ★ ♡ ༒ ⭑๋࣭ ✟ ♬ ♪ ☦ ✞ ✩ 🕷️ 🖤 ⛓ 💉 ✖️ ⚰️ 🕯 🗡 🔗 🎧 📓 ⛓ ☠️ 🎀 🕯️ 🍷 ♰ 🕸️ 🎀 🕷️ 🔪 💀 🗝️ 🖇️ 🎸 ✟ ✖️ 💉"
+        },
+        love: {
+          name: "💕 love",
+          set: "❤️ 💕 💜 💙 💔 💖 ♥️ 💗 💛 💓 💚 🤍 🖤  💞 ❣️ 💘 🧡 💝 💟 🤎 😍  😭 🥺 🙏 ✨ 🌸 🌺 💋 😘 💦 🥰 ☺️ 🔥 🌹 😋 🦶 🦋 😊"
+        },
+        ownSet: {
+          name: "🔎 own set",
+          set: ''
         }
-
-        this.textarea = currentEmojiSet[Math.floor(Math.random() * currentEmojiSet.length)] + ' ' + this.textarea.split(' ').map(e => e + ' ' + currentEmojiSet[Math.floor(Math.random() * currentEmojiSet.length)] + ' ').join('')
       }
     }
-  })
+  },
+
+  computed: {
+    isOwnInputShown: function () {
+      return this.emojiSets.ownSet.isActive;
+    }
+  },
+
+  methods: {
+    tabClick(item) {
+      // set active tab
+      for (const name in this.emojiSets) {
+        this.emojiSets[name].isActive = false;
+      }
+
+      item.isActive = true;
+    },
+
+    doShit() {
+      let currentEmojiSet: any = [];
+
+      const splitEmoji = (string) => [...new Intl.Segmenter().segment(string)].map(x => x.segment);
+
+      for (const name in this.emojiSets) {
+        if (this.emojiSets[name].isActive) {
+          currentEmojiSet = splitEmoji(this.emojiSets[name].set);
+          break;
+        }
+      }
+
+      currentEmojiSet = currentEmojiSet.map(e => e.trim()).filter(e => e != '')
+
+      this.textarea = currentEmojiSet[Math.floor(Math.random() * currentEmojiSet.length)] + ' ' + this.textarea.split(' ').map(e => e + ' ' + currentEmojiSet[Math.floor(Math.random() * currentEmojiSet.length)] + ' ').join('')
+    }
+  }
+})
 </script>
 
 <style scoped>
-  .container {
-    text-align: center;
-  }
+.container {
+  padding: 15px
+}
 
-  .menu label {
-    display: inline-block;
-    margin-right: 10px;
-    margin-bottom: 10px;
-  }
-
-  input[type=text] {
-    background-color: #f2f3f5;
-    padding: 15px 20px;
-    border: none;
-    border-radius: 15px;
-    font-size: 20px;
-    height: 50px;
-  }
-
-  input[type=radio] {
-    opacity: 0;
-    width: 0;
-    height: 0;
-    margin: 0;
-  }
-
-  label {
-    background-color: #f2f3f5;
-    padding: 5px 15px;
-    border-radius: 100px;
-    font-weight: 500;
-    font-family: helvetica;
-
-/*height: 20px*/
-  }
-
-  label:has(input[type=radio]:checked) {
-    background-color: #5865f2;
-    color: white;
-  }
-
-  .menu {
-    text-align: left;
-  }
-
-  .own-input {
-/*    display: block;*/
-    width: 100%;
-  }
-
-  textarea {
-    width: 100%;
-    height: 200px;
-    background-color: #f2f3f5;
-    padding: 15px 20px;
-    border: none;
-    border-radius: 15px;
-    font-size: 20px;
-  }
-
-  button.submit {
-    width: 100%;
-    background-color: #5865f2;
-    border-radius: 20px;
-    border: none;
-    font-size: 15px;
-    height: 50px;
-  }
-
-  button.submit:hover {
-    opacity: 0.8;
-    background-color: #5865f2;
-  }
-
-  h2 {
-    margin-top: 30px;
-  }
-
+* {
+  box-sizing: border-box !important;
+}
 </style>
