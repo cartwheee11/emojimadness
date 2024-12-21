@@ -24,10 +24,11 @@
           placeholder="set your own emoji map" type="text">
       </div>
 
-      <textarea class="textarea is-large mb-4" @focusin="(e) => {
-        (e.target as HTMLElement).classList.add('is-primary');
-      }" @focusout="(e: Event) => (e.target as HTMLElement).classList.remove('is-primary')" placeholder="type a text"
-        name="" id="" rows="10"></textarea>
+      <textarea class="textarea is-large mb-4" v-model="textarea"
+        @focusin="(e) => { (e.target as HTMLElement).classList.add('is-primary'); }"
+        @focusout="(e: Event) => (e.target as HTMLElement).classList.remove('is-primary')" placeholder="type a text"
+        name="" id="" rows="10">
+      </textarea>
       <button @click="doShit" class="container submit button  is-mobile max-width is-primary is-large">
         go go go!
       </button>
@@ -107,7 +108,11 @@ export default defineComponent({
         }
       }
 
+
+
       currentEmojiSet = currentEmojiSet.map(e => e.trim()).filter(e => e != '');
+
+      console.log(currentEmojiSet);
 
       this.textarea = currentEmojiSet[Math.floor(Math.random() * currentEmojiSet.length)] + ' ' + this.textarea.split(' ').map(e => e + ' ' + currentEmojiSet[Math.floor(Math.random() * currentEmojiSet.length)] + ' ').join('')
     }
@@ -116,10 +121,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-:root {
-  /* --bulma-primary: red !important; */
-}
-
 .is-toggle .is-active a {
   background-color: var(--bulma-primary) !important;
   border-color: var(--bulma-border) !important;
