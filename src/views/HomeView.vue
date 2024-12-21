@@ -20,7 +20,8 @@
           </ul>
         </div>
 
-        <input class="own-input input is-large mb-4" v-if="isOwnInputShown" v-model="emojiSets.ownSet.set"
+        <input class="own-input input is-large mb-4" v-if="isOwnInputShown" @input="textareaError = false"
+          @focusout="textareaError = false" :class="{ 'is-danger': textareaError }" v-model="emojiSets.ownSet.set"
           placeholder="set your own emoji map" type="text">
       </div>
 
@@ -50,6 +51,7 @@ export default defineComponent({
       radioValue: 'default' as ('default' | 'love' | 'own' | 'gothic'),
       emojiSet: '',
       textarea: '',
+      textareaError: false,
       emojiSets: {
         default: {
           name: "😜 default",
@@ -112,7 +114,12 @@ export default defineComponent({
 
       currentEmojiSet = currentEmojiSet.map(e => e.trim()).filter(e => e != '');
 
-      console.log(currentEmojiSet);
+      if (currentEmojiSet.length === 0) {
+        this.textareaError = true;
+        return;
+      }
+
+      this.textareaError = false;
 
       this.textarea = currentEmojiSet[Math.floor(Math.random() * currentEmojiSet.length)] + ' ' + this.textarea.split(' ').map(e => e + ' ' + currentEmojiSet[Math.floor(Math.random() * currentEmojiSet.length)] + ' ').join('')
     }
