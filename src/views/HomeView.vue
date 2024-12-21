@@ -4,15 +4,14 @@
 
 <template>
   <section>
-    <div class="content">
-      <p class="mt-5 docs-header uppecase has-text-centered">EMOJI MADNESS</p>
-    </div>
 
-    <hr class="hr mb-0">
+    <p class="mt-3 mb-2 docs-header uppecase has-text-centered"><span>EMOJI MADNESS</span></p>
+
+    <hr class="hr m-0">
     <div class="container">
 
       <div class="menu">
-        <div class="tabs is-toggle is-medium mb-4">
+        <div class="tabs is-toggle is-primary is-fullwidth is-medium mb-4">
           <ul class="is-large">
             <li @click="tabClick(item)" v-for="item in emojiSets" :key="item.name"
               :class="{ 'is-active': item.isActive }">
@@ -25,9 +24,11 @@
           placeholder="set your own emoji map" type="text">
       </div>
 
-      <textarea class="textarea is-large mb-4" v-model='textarea' placeholder="type a text" name="" id=""
-        rows="10"></textarea>
-      <button @click="doShit" class="container submit button is-outlined is-mobile max-width is-primary is-large">
+      <textarea class="textarea is-large mb-4" @focusin="(e) => {
+        (e.target as HTMLElement).classList.add('is-primary');
+      }" @focusout="(e: Event) => (e.target as HTMLElement).classList.remove('is-primary')" placeholder="type a text"
+        name="" id="" rows="10"></textarea>
+      <button @click="doShit" class="container submit button  is-mobile max-width is-primary is-large">
         go go go!
       </button>
     </div>
@@ -53,27 +54,27 @@ export default defineComponent({
           name: "😜 default",
           set: "😙 😅 🙁 🤔 😭 ☠️ 💬 💣 🧐 😈 💞 🙀 🤧 😴 💦 😢 ☹️ 😵 🤨 😓 💝 😬 😜 🥴 😍 😸 👺 🤣 💭 😰 💛 😹 😋 🤗 😗 💫 🤯 🙄 😐 👾 👽 💖 🙂 🥶 😒 😠 🙉 😳 😘 💟 🥺 🤍 🥳 😌 😔 🤕 🤪 👻 😝 😞 🤎 😎 🤭 😇 😻 😶 😷 😪 🥱 🤩 😧 😏 ❣️ 😨 🤠 💗 😫 🖤 😿 😤 🤖 👹 🤫 😛 🤮 🤡 😺 😲 😩 🤓 😖 😱 😕 😮 💙 🧡 😦 🗨️ 😄 🤑 💓 😁 😑 💨 🙊 🙃 💤 😯 ❤️ 🤬 💯 💌 💕 🥰 😃 🥵 🤥 💀 💔 💜 💥 💋 💘 😀 🤐 😼 😵 😀 😉 👿 🤤 😥 😆 🙈 😽 😾 😚 🤢 🤒 💩 😡 😂 😊 💢 😣 🗯️ 💚",
           isActive: true,
-        } as EmojiSet,
+        },
         depressed: {
           name: "😥 depressed",
           set: "😣 😥 🤧 💦 😓 😾 😵 😰 🤐",
           isActive: false
-        } as EmojiSet,
+        },
         gothic: {
           name: "⛓ gothic",
           set: "♱ ✮ ☠︎ † ✧ ☆ ★ ♡ ༒ ⭑๋࣭ ✟ ♬ ♪ ☦ ✞ ✩ 🕷️ 🖤 ⛓ 💉 ✖️ ⚰️ 🕯 🗡 🔗 🎧 📓 ⛓ ☠️ 🎀 🕯️ 🍷 ♰ 🕸️ 🎀 🕷️ 🔪 💀 🗝️ 🖇️ 🎸 ✟ ✖️ 💉",
           isActive: false
-        } as EmojiSet,
+        },
         love: {
           name: "💕 love",
           set: "❤️ 💕 💜 💙 💔 💖 ♥️ 💗 💛 💓 💚 🤍 🖤  💞 ❣️ 💘 🧡 💝 💟 🤎 😍  😭 🥺 🙏 ✨ 🌸 🌺 💋 😘 💦 🥰 ☺️ 🔥 🌹 😋 🦶 🦋 😊",
           isActive: false
-        } as EmojiSet,
+        },
         ownSet: {
           name: "🔎 own set",
           set: '',
           isActive: false
-        } as EmojiSet
+        }
       } as EmojiSets
     }
   },
@@ -106,7 +107,7 @@ export default defineComponent({
         }
       }
 
-      currentEmojiSet = currentEmojiSet.map(e => e.trim()).filter(e => e != '')
+      currentEmojiSet = currentEmojiSet.map(e => e.trim()).filter(e => e != '');
 
       this.textarea = currentEmojiSet[Math.floor(Math.random() * currentEmojiSet.length)] + ' ' + this.textarea.split(' ').map(e => e + ' ' + currentEmojiSet[Math.floor(Math.random() * currentEmojiSet.length)] + ' ').join('')
     }
@@ -115,11 +116,28 @@ export default defineComponent({
 </script>
 
 <style scoped>
+:root {
+  /* --bulma-primary: red !important; */
+}
+
+.is-toggle .is-active a {
+  background-color: var(--bulma-primary) !important;
+  border-color: var(--bulma-border) !important;
+}
+
 .container {
   padding: 15px
 }
 
 * {
   box-sizing: border-box !important;
+}
+
+textarea {
+  /* background-color: #092d104f; */
+  /* border-width: 1px; */
+  /* border-color: #7fffd46d; */
+  border-radius: 12px;
+  /* background-color: #002e279b; */
 }
 </style>
